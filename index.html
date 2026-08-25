@@ -6,7 +6,7 @@
     <title>DEV'A-POINT | Canlı E-Ticaret Platformu</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Firebase SDK (SENİN PROJEN İÇİN ENTEGRE EDİLDİ) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
@@ -20,7 +20,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--light); color: var(--secondary); overflow-x: hidden; }
+        body { background-color: var(--light); color: var(--secondary); overflow-x: hidden; padding-bottom: 70px; }
 
         /* Splash Screen Animation */
         #splash-screen {
@@ -43,11 +43,25 @@
         .logo { font-size: 1.8rem; font-weight: bold; color: var(--primary); text-decoration: none; }
         .visitor-badge { font-size: 0.85rem; background: #eee; padding: 5px 12px; border-radius: 20px; margin-top: 5px; display: inline-block; }
         
+        /* Navigasyon Butonları (Sağ Üst & Mobil Alt Bar) */
+        .header-nav { display: flex; gap: 15px; }
+        .nav-icon-btn { position: relative; background: none; border: none; font-size: 1.3rem; color: #444; cursor: pointer; }
+        .badge { position: absolute; top: -5px; right: -8px; background: var(--primary); color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.7rem; font-weight: bold; }
+
+        /* Mobil Alt Sabit Menü (Trendyol Tarzı) */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%; background: var(--white);
+            display: flex; justify-content: space-around; padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 99;
+        }
+        .bottom-nav-item { border: none; background: none; font-size: 0.8rem; color: #666; display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative; }
+        .bottom-nav-item i { font-size: 1.2rem; margin-bottom: 2px; }
+
         /* Layout & Sliders */
         .container { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
         .section-title { font-size: 1.4rem; margin: 20px 0 10px 0; border-left: 4px solid var(--primary); padding-left: 10px; }
 
-        /* Mobil Yatay Kaydırmalı Ürünler (Trendyol Style) */
+        /* Mobil Yatay Kaydırmalı Ürünler */
         .horizontal-slider {
             display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px;
             scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
@@ -69,16 +83,23 @@
         .product-price { color: var(--primary); font-size: 1.2rem; font-weight: bold; }
         
         .card-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
-        .action-btn { background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #666; transition: color 0.2s; }
+        .action-btn { background: none; border: none; cursor: pointer; font-size: 1.2rem; color: #666; transition: color 0.2s; }
         .action-btn.active { color: #e74c3c; }
         .btn-add-cart { background: var(--primary); color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: 600; }
 
-        /* Modal Yapıları */
+        /* Modallar (Popup) */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; }
         .modal-content { background: var(--white); width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; border-radius: 12px; padding: 25px; position: relative; }
         .close-modal { position: absolute; right: 15px; top: 15px; font-size: 1.5rem; cursor: pointer; }
 
-        /* Admin Form Elemanları */
+        /* Sepet & Favori Liste Görünümü */
+        .cart-item { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; padding: 10px 0; }
+        .cart-item-img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
+        .cart-item-info { flex: 1; margin-left: 10px; }
+        .qty-btn { background: #eee; border: none; padding: 2px 8px; cursor: pointer; border-radius: 3px; font-weight: bold; }
+        .whatsapp-btn { background: #25D366; color: white; width: 100%; border: none; padding: 14px; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 15px; display: flex; justify-content: center; align-items: center; gap: 8px; }
+
+        /* Admin Form */
         .admin-form input, .admin-form textarea { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; }
         .admin-btn { background: #27ae60; color: white; width: 100%; border: none; padding: 12px; border-radius: 5px; font-size: 1rem; cursor: pointer; font-weight: bold; }
         .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem; }
@@ -94,7 +115,7 @@
         </div>
     </div>
 
-    <!-- Header (Admin Butonu Gizli) -->
+    <!-- Header -->
     <header>
         <div class="header-top">
             <div>
@@ -103,8 +124,10 @@
                     <i class="fa-solid fa-eye"></i> Ziyaret Sayısı: <span id="visitor-count">Yükleniyor...</span>
                 </div>
             </div>
-            <div>
-                <button onclick="requestNotificationPermission()" class="action-btn" title="Bildirim İzni"><i class="fa-solid fa-bell"></i></button>
+            <div class="header-nav">
+                <button onclick="requestNotificationPermission()" class="nav-icon-btn" title="Bildirim İzni"><i class="fa-solid fa-bell"></i></button>
+                <button onclick="openModal('favorites-modal')" class="nav-icon-btn"><i class="fa-solid fa-heart"></i><span class="badge" id="fav-count-badge">0</span></button>
+                <button onclick="openModal('cart-modal')" class="nav-icon-btn"><i class="fa-solid fa-shopping-cart"></i><span class="badge" id="cart-count-badge">0</span></button>
             </div>
         </div>
     </header>
@@ -119,11 +142,52 @@
         <div class="product-grid" id="main-products"></div>
     </div>
 
-    <!-- Ürün Detay Popup -->
+    <!-- Mobil Alt Sabit Navigasyon -->
+    <div class="bottom-nav">
+        <button class="bottom-nav-item" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+            <i class="fa-solid fa-house"></i> Ana Sayfa
+        </button>
+        <button class="bottom-nav-item" onclick="openModal('favorites-modal')">
+            <i class="fa-solid fa-heart"></i> Favorilerim
+            <span class="badge" id="fav-count-badge-mobile">0</span>
+        </button>
+        <button class="bottom-nav-item" onclick="openModal('cart-modal')">
+            <i class="fa-solid fa-shopping-cart"></i> Sepetim
+            <span class="badge" id="cart-count-badge-mobile">0</span>
+        </button>
+    </div>
+
+    <!-- Ürün Detay Modal -->
     <div id="product-modal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal('product-modal')">&times;</span>
             <div id="modal-detail-body"></div>
+        </div>
+    </div>
+
+    <!-- Favorilerim Modal -->
+    <div id="favorites-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('favorites-modal')">&times;</span>
+            <h2><i class="fa-solid fa-heart" style="color:#e74c3c;"></i> Beğendiklerim</h2>
+            <hr style="margin: 10px 0;">
+            <div id="favorites-list"></div>
+        </div>
+    </div>
+
+    <!-- Sepetim Modal -->
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('cart-modal')">&times;</span>
+            <h2><i class="fa-solid fa-shopping-cart" style="color:var(--primary);"></i> Sepetim</h2>
+            <hr style="margin: 10px 0;">
+            <div id="cart-list"></div>
+            <div style="margin-top:15px; font-size:1.2rem; font-weight:bold; text-align:right;">
+                Toplam: <span id="cart-total-price" style="color:var(--primary);">0</span> TL
+            </div>
+            <button class="whatsapp-btn" onclick="sendWhatsAppOrder()">
+                <i class="fa-brands fa-whatsapp"></i> WhatsApp ile Siparişi Tamamla
+            </button>
         </div>
     </div>
 
@@ -140,7 +204,7 @@
             <textarea id="notif-body" placeholder="Bildirim Mesajınız"></textarea>
             <button class="admin-btn" style="background: #2980b9; margin-bottom: 25px;" onclick="sendAdminNotification()">Cihazlara Gönder</button>
 
-            <!-- Ürün Ekleme / Düzenleme Formu -->
+            <!-- Ürün Ekleme Formu -->
             <h3><i class="fa-solid fa-cloud-arrow-up"></i> Bulut Sunucuya Ürün Ekle / Düzenle</h3>
             <form id="admin-product-form" class="admin-form">
                 <input type="hidden" id="admin-p-id">
@@ -176,7 +240,7 @@
     </div>
 
     <script>
-        // --- 1. FIREBASE PROJE AYARLARIN ---
+        // --- 1. FIREBASE PROJE AYARLARI ---
         const firebaseConfig = {
             apiKey: "AIzaSyBP5mhJ5wVg6deQnRW2UXDzKlNYXaS6B8A",
             authDomain: "dev-a-point.firebaseapp.com",
@@ -188,22 +252,20 @@
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+        
         let products = [];
+        let favorites = JSON.parse(localStorage.getItem('deva_favorites')) || [];
+        let cart = JSON.parse(localStorage.getItem('deva_cart')) || [];
 
-        // --- 2. BİLDİRİM İZNİ VE SAYAC ---
+        // --- 2. BİLDİRİM & SAYAÇ ---
         setTimeout(() => { requestNotificationPermission(); }, 2800);
 
         function requestNotificationPermission() {
             if ("Notification" in window) {
-                Notification.requestPermission().then(permission => {
-                    if (permission === "granted") {
-                        console.log("Bildirim izni alındı.");
-                    }
-                });
+                Notification.requestPermission();
             }
         }
 
-        // Bulutta Ortak Ziyaretçi Sayacı
         function syncVisitors() {
             const statsRef = db.collection('stats').doc('visitors');
             statsRef.get().then((doc) => {
@@ -220,7 +282,7 @@
             });
         }
 
-        // --- 3. GALERİDEN GÖRSEL OKUMA VE OTOMATİK SIKIŞTIRMA (1MB Sınırını Aşmama) ---
+        // --- 3. GALERİDEN GÖRSEL SIKIŞTIRMA ---
         document.getElementById('admin-p-file').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -231,14 +293,11 @@
                     img.onload = function() {
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
-                        
-                        const maxWidth = 500; // Firebase 1MB limitine takılmaması için otomatik yeniden boyutlandırır
+                        const maxWidth = 500;
                         const scaleSize = maxWidth / img.width;
                         canvas.width = maxWidth;
                         canvas.height = img.height * scaleSize;
-
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        
                         const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
                         document.getElementById('admin-p-img').value = compressedDataUrl;
                     };
@@ -247,7 +306,7 @@
             }
         });
 
-        // --- 4. CANLI BULUT VERİ DİNLEME (Tüm Cihazlarla Anlık Senkron) ---
+        // --- 4. CANLI VERİ DİNLEME ---
         function listenCloudProducts() {
             db.collection("products").onSnapshot((snapshot) => {
                 products = [];
@@ -255,6 +314,7 @@
                     products.push({ id: doc.id, ...doc.data() });
                 });
                 renderProducts();
+                updateBadges();
                 if(window.location.hash === '#admin') renderAdminTable();
             });
         }
@@ -265,11 +325,12 @@
             slider.innerHTML = ''; grid.innerHTML = '';
 
             if (products.length === 0) {
-                grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:20px;">Henüz buluta ürün eklenmedi. Admin panelinden ürün ekleyebilirsiniz.</p>';
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:20px;">Henüz buluta ürün eklenmedi.</p>';
                 return;
             }
 
             products.forEach(p => {
+                const isFav = favorites.includes(p.id);
                 const cardHtml = `
                     <div class="product-card" onclick="openProductDetail('${p.id}')">
                         <img src="${p.img}" class="product-img" alt="${p.title}">
@@ -277,11 +338,8 @@
                         <div class="product-title">${p.title}</div>
                         <div class="product-price">${p.price} TL</div>
                         <div class="card-actions" onclick="event.stopPropagation();">
-                            <button class="action-btn ${p.liked ? 'active' : ''}" onclick="toggleLike('${p.id}')">
-                                <i class="fa-solid fa-heart"></i> <small>${p.likes || 0}</small>
-                            </button>
-                            <button class="action-btn ${p.saved ? 'active' : ''}" onclick="toggleSave('${p.id}')">
-                                <i class="fa-solid fa-bookmark"></i>
+                            <button class="action-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite('${p.id}')">
+                                <i class="fa-${isFav ? 'solid' : 'regular'} fa-heart"></i>
                             </button>
                             <button class="btn-add-cart" onclick="addToCart('${p.id}')">Sepete Ekle</button>
                         </div>
@@ -292,10 +350,156 @@
             });
         }
 
+        // --- 5. FAVORİ & SEPET İŞLEMLERİ ---
+        function toggleFavorite(id) {
+            const index = favorites.indexOf(id);
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(id);
+            }
+            localStorage.setItem('deva_favorites', JSON.stringify(favorites));
+            renderProducts();
+            updateBadges();
+            if(document.getElementById('favorites-modal').style.display === 'flex') renderFavoritesModal();
+        }
+
+        function addToCart(id) {
+            const existing = cart.find(item => item.id === id);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ id: id, qty: 1 });
+            }
+            localStorage.setItem('deva_cart', JSON.stringify(cart));
+            updateBadges();
+            alert("Ürün sepetinize eklendi!");
+        }
+
+        function changeQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) {
+                    cart = cart.filter(i => i.id !== id);
+                }
+            }
+            localStorage.setItem('deva_cart', JSON.stringify(cart));
+            updateBadges();
+            renderCartModal();
+        }
+
+        function updateBadges() {
+            const favCount = favorites.length;
+            const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);
+
+            document.getElementById('fav-count-badge').innerText = favCount;
+            document.getElementById('fav-count-badge-mobile').innerText = favCount;
+            document.getElementById('cart-count-badge').innerText = cartCount;
+            document.getElementById('cart-count-badge-mobile').innerText = cartCount;
+        }
+
+        function openModal(modalId) {
+            if (modalId === 'favorites-modal') renderFavoritesModal();
+            if (modalId === 'cart-modal') renderCartModal();
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function renderFavoritesModal() {
+            const container = document.getElementById('favorites-list');
+            container.innerHTML = '';
+            
+            const favProducts = products.filter(p => favorites.includes(p.id));
+
+            if (favProducts.length === 0) {
+                container.innerHTML = '<p style="text-align:center; padding:20px; color:#777;">Favorilerinizde ürün bulunmamaktadır.</p>';
+                return;
+            }
+
+            favProducts.forEach(p => {
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <img src="${p.img}" class="cart-item-img">
+                        <div class="cart-item-info">
+                            <strong>${p.title}</strong>
+                            <div style="color:var(--primary); font-weight:bold;">${p.price} TL</div>
+                        </div>
+                        <button class="btn-add-cart" onclick="addToCart('${p.id}')">Sepete Ekle</button>
+                        <button class="action-btn active" style="margin-left:10px;" onclick="toggleFavorite('${p.id}')"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+            });
+        }
+
+        function renderCartModal() {
+            const container = document.getElementById('cart-list');
+            container.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="text-align:center; padding:20px; color:#777;">Sepetiniz boş.</p>';
+                document.getElementById('cart-total-price').innerText = '0';
+                return;
+            }
+
+            cart.forEach(item => {
+                const p = products.find(prod => prod.id === item.id);
+                if (p) {
+                    const itemTotal = p.price * item.qty;
+                    total += itemTotal;
+                    container.innerHTML += `
+                        <div class="cart-item">
+                            <img src="${p.img}" class="cart-item-img">
+                            <div class="cart-item-info">
+                                <strong>${p.title}</strong>
+                                <div style="color:var(--primary); font-weight:bold;">${p.price} TL</div>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:5px;">
+                                <button class="qty-btn" onclick="changeQty('${p.id}', -1)">-</button>
+                                <span>${item.qty}</span>
+                                <button class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            document.getElementById('cart-total-price').innerText = total.toLocaleString();
+        }
+
+        // --- 6. WHATSAPP İLE SİPARİŞ GÖNDERME ---
+        function sendWhatsAppOrder() {
+            if (cart.length === 0) return alert("Sepetiniz boş!");
+
+            let message = "Merhaba DEV'A-POINT, web sitenizden aşağıdaki ürünleri satın almak istiyorum:\n\n";
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                const p = products.find(prod => prod.id === item.id);
+                if (p) {
+                    const itemTotal = p.price * item.qty;
+                    total += itemTotal;
+                    message += `${index + 1}. *${p.title}*\n`;
+                    message += `   • Adet: ${item.qty}\n`;
+                    message += `   • Birim Fiyat: ${p.price} TL\n`;
+                    message += `   • Görsel Bağlantısı: ${p.img}\n\n`;
+                }
+            });
+
+            message += `*Toplam Tutar: ${total.toLocaleString()} TL*\n\nSiparişim hakkında bilgi almak istiyorum.`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/905518329861?text=${encodedMessage}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
         function openProductDetail(id) {
             const p = products.find(prod => prod.id === id);
             p.views = (p.views || 0) + 1;
-            
             db.collection("products").doc(id).update({ views: p.views });
 
             const body = document.getElementById('modal-detail-body');
@@ -307,60 +511,25 @@
                 <p><strong>Stok Durumu:</strong> ${p.stock}</p>
                 <p style="margin: 10px 0; color:#555;">${p.desc}</p>
                 <hr style="margin:10px 0;">
-                <div style="font-size:0.85rem; color:#777;">
-                    <span><i class="fa-solid fa-eye"></i> ${p.views} Görüntüleme</span> | 
-                    <span><i class="fa-solid fa-heart"></i> ${p.likes || 0} Beğeni</span>
-                </div>
+                <button class="btn-add-cart" style="width:100%; padding:12px; font-size:1rem;" onclick="addToCart('${p.id}')">Sepete Ekle</button>
             `;
             document.getElementById('product-modal').style.display = 'flex';
         }
 
-        function toggleLike(id) {
-            const p = products.find(prod => prod.id === id);
-            p.liked = !p.liked;
-            p.likes = (p.likes || 0) + (p.liked ? 1 : -1);
-            db.collection("products").doc(id).update({ likes: p.likes });
-        }
-
-        function toggleSave(id) {
-            const p = products.find(prod => prod.id === id);
-            p.saved = !p.saved;
-            renderProducts();
-        }
-
-        function addToCart(id) { alert("Ürün sepetinize eklendi!"); }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-        // --- 5. BİLDİRİM GÖNDERME DÜZELTİLDİ ---
+        // --- 7. ADMİN VE BİLDİRİM KONTROLÜ ---
         function sendAdminNotification() {
             const title = document.getElementById('notif-title').value;
             const body = document.getElementById('notif-body').value;
-
             if (!title || !body) return alert("Lütfen başlık ve mesaj girin!");
 
-            if (!("Notification" in window)) {
-                alert("Bu tarayıcı bildirimleri desteklemiyor.");
-                return;
-            }
-
             if (Notification.permission === "granted") {
-                new Notification(title, { body: body, icon: 'https://via.placeholder.com/100' });
-                alert("Bildirim ekrana gönderildi!");
-            } else if (Notification.permission !== "denied") {
-                Notification.requestPermission().then(permission => {
-                    if (permission === "granted") {
-                        new Notification(title, { body: body, icon: 'https://via.placeholder.com/100' });
-                        alert("Bildirim ekrana gönderildi!");
-                    } else {
-                        alert("Bildirim izni reddedildi.");
-                    }
-                });
+                new Notification(title, { body: body });
+                alert("Bildirim gönderildi!");
             } else {
-                alert("Bildirim izni engellenmiş. Tarayıcı ayarlarından site izinlerini kontrol edin.");
+                alert("Kullanıcı bildirimlere izin vermedi.");
             }
         }
 
-        // --- 6. ADMİN PANELİ KONTROLÜ (#admin) ---
         window.addEventListener('hashchange', checkHash);
         window.addEventListener('load', () => {
             syncVisitors();
@@ -400,15 +569,12 @@
             });
         }
 
-        // Form Gönderildiğinde Doğrudan Bulut Veritabanına Yaz
         document.getElementById('admin-product-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const existingImg = document.getElementById('admin-p-img').value;
-            if (!existingImg) return alert("Lütfen galerinizden bir ürün resmi seçin!");
+            if (!existingImg) return alert("Lütfen resim seçin!");
 
             const id = document.getElementById('admin-p-id').value || 'DEV-' + Math.floor(1000 + Math.random() * 9000);
-
             const productData = {
                 title: document.getElementById('admin-p-title').value,
                 price: parseFloat(document.getElementById('admin-p-price').value),
@@ -420,14 +586,11 @@
                 likes: parseInt(document.getElementById('admin-p-likes').value) || 0
             };
 
-            // Firebase Firestore'a Kaydetme
             db.collection("products").doc(id).set(productData, { merge: true }).then(() => {
-                alert("Ürün başarıyla Firebase bulut veritabanına yüklendi! Diğer tüm kullanıcılar artık görebilir.");
+                alert("Ürün buluta yüklendi!");
                 document.getElementById('admin-product-form').reset();
                 document.getElementById('admin-p-img').value = '';
                 document.getElementById('admin-p-id').value = '';
-            }).catch((err) => {
-                alert("Hata oluştu: " + err.message);
             });
         });
 
@@ -440,15 +603,11 @@
             document.getElementById('admin-p-desc').value = p.desc;
             document.getElementById('admin-p-seller').value = p.seller;
             document.getElementById('admin-p-stock').value = p.stock;
-            document.getElementById('admin-p-views').value = p.views || 0;
-            document.getElementById('admin-p-likes').value = p.likes || 0;
         }
 
         function deleteProduct(id) {
-            if (confirm("Bu ürünü silmek istediğinize emin misiniz? (Tüm cihazlardan silinecektir)")) {
-                db.collection("products").doc(id).delete().then(() => {
-                    alert("Ürün buluttan tamamen silindi.");
-                });
+            if (confirm("Silmek istediğinize emin misiniz?")) {
+                db.collection("products").doc(id).delete();
             }
         }
     </script>
