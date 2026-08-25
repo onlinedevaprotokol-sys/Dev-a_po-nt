@@ -176,7 +176,7 @@
     </div>
 
     <script>
-        // --- 1. SENİN FIREBASE PROJE AYARLARIN ---
+        // --- 1. FIREBASE PROJE AYARLARIN ---
         const firebaseConfig = {
             apiKey: "AIzaSyBP5mhJ5wVg6deQnRW2UXDzKlNYXaS6B8A",
             authDomain: "dev-a-point.firebaseapp.com",
@@ -190,12 +190,16 @@
         const db = firebase.firestore();
         let products = [];
 
-        // --- 2. OTOMATİK BİLDİRİM VE SAYAC ---
+        // --- 2. BİLDİRİM İZNİ VE SAYAC ---
         setTimeout(() => { requestNotificationPermission(); }, 2800);
 
         function requestNotificationPermission() {
-            if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
-                Notification.requestPermission();
+            if ("Notification" in window) {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        console.log("Bildirim izni alındı.");
+                    }
+                });
             }
         }
 
@@ -216,13 +220,28 @@
             });
         }
 
-        // --- 3. GALERİDEN GÖRSEL OKUMA (Base64) ---
+        // --- 3. GALERİDEN GÖRSEL OKUMA VE OTOMATİK SIKIŞTIRMA (1MB Sınırını Aşmama) ---
         document.getElementById('admin-p-file').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(event) {
-                    document.getElementById('admin-p-img').value = event.target.result;
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        
+                        const maxWidth = 500; // Firebase 1MB limitine takılmaması için otomatik yeniden boyutlandırır
+                        const scaleSize = maxWidth / img.width;
+                        canvas.width = maxWidth;
+                        canvas.height = img.height * scaleSize;
+
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        
+                        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+                        document.getElementById('admin-p-img').value = compressedDataUrl;
+                    };
                 };
                 reader.readAsDataURL(file);
             }
@@ -277,7 +296,6 @@
             const p = products.find(prod => prod.id === id);
             p.views = (p.views || 0) + 1;
             
-            // Bulutta Görüntülemeyi Artır
             db.collection("products").doc(id).update({ views: p.views });
 
             const body = document.getElementById('modal-detail-body');
@@ -313,18 +331,32 @@
         function addToCart(id) { alert("Ürün sepetinize eklendi!"); }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // --- 5. BİLDİRİM GÖNDERME ---
+        // --- 5. BİLDİRİM GÖNDERME DÜZELTİLDİ ---
         function sendAdminNotification() {
             const title = document.getElementById('notif-title').value;
             const body = document.getElementById('notif-body').value;
 
             if (!title || !body) return alert("Lütfen başlık ve mesaj girin!");
 
+            if (!("Notification" in window)) {
+                alert("Bu tarayıcı bildirimleri desteklemiyor.");
+                return;
+            }
+
             if (Notification.permission === "granted") {
-                new Notification(title, { body: body });
-                alert("Bildirim cihaz ekranına gönderildi!");
+                new Notification(title, { body: body, icon: 'https://via.placeholder.com/100' });
+                alert("Bildirim ekrana gönderildi!");
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        new Notification(title, { body: body, icon: 'https://via.placeholder.com/100' });
+                        alert("Bildirim ekrana gönderildi!");
+                    } else {
+                        alert("Bildirim izni reddedildi.");
+                    }
+                });
             } else {
-                alert("Kullanıcı bildirimlere izin vermediği için gönderilemiyor.");
+                alert("Bildirim izni engellenmiş. Tarayıcı ayarlarından site izinlerini kontrol edin.");
             }
         }
 
