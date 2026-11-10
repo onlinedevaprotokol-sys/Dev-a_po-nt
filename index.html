@@ -44,6 +44,23 @@
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased flex flex-col min-h-screen">
 
+    <!-- GÜNCELLEME DUYURU BİLDİRİM BANTI -->
+    <div id="updateNoticeBanner" class="bg-amber-500 text-gray-900 border-b border-amber-600 px-4 py-2.5 relative z-50 shadow-md">
+        <div class="container mx-auto flex items-center justify-between gap-3 text-xs md:text-sm font-semibold">
+            <div class="flex items-center gap-2">
+                <span class="bg-gray-900 text-amber-400 text-[10px] font-black uppercase px-2 py-0.5 rounded tracking-wider flex-shrink-0">
+                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> ÖNEMLİ BİLDİRİM
+                </span>
+                <p class="leading-tight">
+                    Web sitemiz şu anda güncelleme aşamasında olduğu için ürün fotoğraflarımız ve görsellerimiz ürünlerin ismi ile birebir aynı değildir. Güncellememiz 15 Kasım'da bitmektedir. 15 Kasım'dan itibaren güncel resimlerimiz kullanılacaktır.
+                </p>
+            </div>
+            <button onclick="document.getElementById('updateNoticeBanner').remove()" class="text-gray-900 hover:text-white p-1 font-bold text-lg leading-none transition" title="Kapat">
+                &times;
+            </button>
+        </div>
+    </div>
+
     <!-- TOP ANNOUNCEMENT BAR (4 Years Active Trust Indicator) -->
     <div class="bg-gradient-to-r from-brand-600 via-orange-500 to-amber-600 text-white text-xs md:text-sm py-2 px-4 text-center font-medium shadow-sm">
         <div class="container mx-auto flex justify-between items-center px-2">
